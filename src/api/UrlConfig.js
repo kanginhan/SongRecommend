@@ -1,4 +1,5 @@
-var BASE_URL = "https://songrecommendapi.azurewebsites.net/api";
+// var BASE_URL = "https://songrecommendapi.azurewebsites.net/api";
+var BASE_URL = "https://localhost:44350/api";
 
 export default {
     test: {

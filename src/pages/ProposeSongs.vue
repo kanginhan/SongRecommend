@@ -1,81 +1,87 @@
 <template>
-<v-container>
-  <div class="pl-3 pt-3">
-    <v-layout align-center class="mb-4">
-      <v-flex>
-        <span class="headline">프로포즈/축가 목록</span>
-        <br>
-        <span class="body-1">AI가 멜론에서 찾은 최고의 목록이며 자동으로 업데이트 됩니다</span>
-      </v-flex>
-      <v-spacer></v-spacer>
-      <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
-    </v-layout>
-    <v-layout class="pt-3 pb-3">
-      <v-flex>
-        <v-chip
-          v-for="chip in chips"
-          :key="chip.text"
-          color="red"
-          :outline="!chip.selected"
-          @click="selectChip(chip)"
-        >{{ chip.text }}</v-chip>
-      </v-flex>
-    </v-layout>
+  <v-container>
+    <div class="pl-3 pt-3">
+      <v-layout align-center class="mb-4">
+        <v-flex>
+          <span class="headline">프로포즈/축가 목록</span>
+          <br>
+          <span class="body-1">AI가 멜론에서 찾은 최고의 목록이며 자동으로 업데이트 됩니다</span>
+        </v-flex>
+        <v-spacer></v-spacer>
+        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+      </v-layout>
+      <v-layout class="pt-3 pb-3">
+        <v-flex>
+          <v-chip
+            v-for="chip in chips"
+            :key="chip.text"
+            color="red"
+            :outline="!chip.selected"
+            @click="selectChip(chip)"
+          >{{ chip.text }}</v-chip>
+        </v-flex>
+      </v-layout>
 
-    <v-layout>
-      <v-flex>
-        <v-data-table
-          :headers="headers"
-          :items="proposeSongs"
-          :search="search"
-          :pagination.sync="pagination"
-          class="elevation-1"
-          :rows-per-page-items="[10, 25]"
-        >
-          <template v-slot:items="props">
-            <tr>
-              <td class="clickable" @click="selectSong(props.item)">{{ props.item.title }}</td>
-              <td class="clickable" @click="selectSong(props.item)">{{ props.item.singer }}</td>
-              <td class="subheading clickable" @click="selectSong(props.item)">{{ parseInt(props.item.rate) }}</td>
-              <td class="clickable" @click="selectSong(props.item)">{{ props.item.genre }}</td>
-              <td
-                class="clickable"
-                @click="selectSong(props.item)"
-              >{{ (new Date(props.item.releaseDate)).toLocaleDateString() }}</td>
-              <td class="clickable" @click="selectSong(props.item)">
-                <v-icon size="15">favorite_border</v-icon>
-                {{ props.item.like }}
-              </td>
-              <td>
-                <v-icon
-                  v-if="props.item.favorite"
-                  color="red"
-                  @click="setFavorite(props.item)"
-                >favorite</v-icon>
-                <v-icon v-else color="red" @click="setFavorite(props.item)">favorite_border</v-icon>
-              </td>
-            </tr>
-          </template>
-          <template v-slot:no-data>
-            <v-alert :value="true" color="grey" icon="warning">검색결과 없습니다</v-alert>
-          </template>
-          <template v-slot:no-results>
-            <v-alert :value="true" color="grey" icon="warning">"{{ search }}" 검색결과 없습니다</v-alert>
-          </template>
-        </v-data-table>
-      </v-flex>
-    </v-layout>
+      <v-layout>
+        <v-flex>
+          <v-data-table
+            :headers="headers"
+            :items="proposeSongs"
+            :search="search"
+            :pagination.sync="pagination"
+            class="elevation-1"
+            :rows-per-page-items="[10, 25]"
+          >
+            <template v-slot:items="props">
+              <tr>
+                <td class="clickable" @click="selectSong(props.item)">{{ props.item.title }}</td>
+                <td class="clickable" @click="selectSong(props.item)">{{ props.item.singer }}</td>
+                <td
+                  class="subheading clickable"
+                  @click="selectSong(props.item)"
+                >{{ parseInt(props.item.rate) }}</td>
+                <td class="clickable" @click="selectSong(props.item)">{{ props.item.genre }}</td>
+                <td
+                  class="clickable"
+                  @click="selectSong(props.item)"
+                >{{ (new Date(props.item.releaseDate)).toLocaleDateString() }}</td>
+                <td class="clickable" @click="selectSong(props.item)">
+                  <v-icon size="15">favorite_border</v-icon>
+                  {{ props.item.like }}
+                </td>
+                <td>
+                  <v-icon
+                    v-if="props.item.favorite"
+                    color="red"
+                    @click="setFavorite(props.item)"
+                  >favorite</v-icon>
+                  <v-icon v-else color="red" @click="setFavorite(props.item)">favorite_border</v-icon>
+                </td>
+              </tr>
+            </template>
+            <template v-slot:no-data>
+              <v-alert :value="true" color="grey" icon="warning">검색결과 없습니다</v-alert>
+            </template>
+            <template v-slot:no-results>
+              <v-alert :value="true" color="grey" icon="warning">"{{ search }}" 검색결과 없습니다</v-alert>
+            </template>
+          </v-data-table>
+        </v-flex>
+      </v-layout>
 
-    <v-dialog v-model="dialog" scrollable max-width="500px">
-      <v-card>
-        <v-card-title class="headline red" primary-title>
-          {{selectedSong.title}}
-          <v-spacer></v-spacer>
-          <v-icon @click="dialog = false">clear</v-icon>
-        </v-card-title>
-        <v-card-text v-html="selectedSong.lyric"></v-card-text>
-      </v-card>
-    </v-dialog>
+      <v-dialog v-model="dialog" scrollable max-width="500px">
+        <v-card>
+          <v-card-title class="headline red" primary-title>
+            {{selectedSong.title}}
+            <v-spacer></v-spacer>
+            <v-btn round class="light-green darken-2" @click="anlayzeLyric">
+              <v-icon size="15">notes</v-icon>가사분석하기
+            </v-btn>
+            <v-icon @click="dialog = false">clear</v-icon>
+          </v-card-title>
+          <v-card-text v-html="selectedSong.lyric"></v-card-text>
+        </v-card>
+      </v-dialog>
     </div>
   </v-container>
 </template>
@@ -188,7 +194,13 @@ export default {
         {
           text: "#기타장르",
           selected: false,
-          action: list => list.filter(x => x.genre && !x.genre.includes("댄스") && !x.genre.includes("발라드"))
+          action: list =>
+            list.filter(
+              x =>
+                x.genre &&
+                !x.genre.includes("댄스") &&
+                !x.genre.includes("발라드")
+            )
         },
         {
           text: "#최근등록",
@@ -255,6 +267,12 @@ export default {
         localStorage.myList = localStorage.myList + item.songId + "∬";
       }
       item.favorite = !item.favorite;
+    },
+    anlayzeLyric: function() {
+      if (confirm(`${this.selectedSong.title} 을 분석하시겠습니까?`)) {
+        var item = { SONGID: this.selectedSong.songId };
+        this.$router.push({ name: "analyzesong", params: item });
+      }
     }
   },
   beforeMount: function() {

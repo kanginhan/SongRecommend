@@ -20,19 +20,19 @@
 
     <v-layout v-else>
       <v-flex xs12 sm6 offset-sm3>
-        <v-btn color="red" small round @click="goPage('/searchsong')">다시 찾기</v-btn>
+        <v-btn color="red" small round @click="goPage('/searchsong')">노래찾기</v-btn>
         <v-btn color="red" small round @click="goPage('/proposesongs')">목록으로</v-btn>
         <v-card class="elevation-5">
           <v-list two-line class>
             <v-list-tile avatar>
               <v-list-tile-avatar>
-                <img :src="song.ALBUMIMG">
+                <img :src="analyzeResult.albumCover">
               </v-list-tile-avatar>
 
               <v-list-tile-content>
-                <v-list-tile-title v-html="song.SONGNAME"></v-list-tile-title>
+                <v-list-tile-title v-html="analyzeResult.title"></v-list-tile-title>
                 <v-list-tile-sub-title
-                  v-html="`<span class='text--primary'>${song.ARTISTNAME}</span> <span class='caption'>- ${song.ALBUMNAME}</span>`"
+                  v-html="`<span class='text--primary'>${analyzeResult.singer}</span> <span class='caption'>- ${analyzeResult.albumName}</span>`"
                 ></v-list-tile-sub-title>
               </v-list-tile-content>
 
